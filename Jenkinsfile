@@ -1,14 +1,14 @@
 pipeline {
     agent any
     stages {
-        stage("AWS Demo") {
+        stage("AWS Credentials") 
             steps {
                 withCredentials([
                     [
                         $class: 'AmazonWebServicesCredentialsBinding',
                         credentialsId: 'aws_credential',
                         accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-                        secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+                        secretKeyVariable: 'AWS_SECRET_ACCESS_KEY',
                     ]
                 ]) {
                     sh "aws s3 ls"
@@ -31,4 +31,4 @@ pipeline {
             }
         }
     }
-}
+
