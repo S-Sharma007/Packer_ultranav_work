@@ -1,2 +1,2 @@
 # Packer_ultranav_work
-Creation of the AMI is aws for the client ultranav
+Creation of the AMI with the help of the Packer for ULtranav
