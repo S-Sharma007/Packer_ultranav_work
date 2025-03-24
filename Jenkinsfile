@@ -1,12 +1,10 @@
 pipeline {
-    agent any
-    stages {
-        stage('Install Packer') {
-            steps {
-                sh 'sudo apt-get update'
-                sh 'sudo apt-get install -y packer'
-            }
+    agent {
+        docker {
+            image 'hashicorp/packer:latest'  // Or a specific version
         }
+    }
+    stages {
         stage('Checkout Code') {
             steps {
                 git 'https://github.com/S-Sharma007/Packer_ultranav_work.git'
