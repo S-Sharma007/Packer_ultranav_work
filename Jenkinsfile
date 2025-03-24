@@ -1,14 +1,18 @@
 pipeline {
     agent any
     stages {
-        stage("AWS Credentials")
+        stage("Checkout Code") {
             steps {
-                sh "aws s3 ls"
+                git branch: 'main', credentialsId: 'github_creds', url: 'https://github.com/S-Sharma007/Packer_ultranav_work.git'
             }
         }
-        stage("Building AMI") {
+        stage("Packer Init") {
             steps {
                 sh "packer init aws-ami-v1.pkr.hcl"
+            }
+        }
+        stage("Packer Build") {
+            steps {
                 sh "packer build aws-ami-v1.pkr.hcl"
             }
         }
