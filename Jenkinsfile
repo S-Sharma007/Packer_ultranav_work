@@ -1,9 +1,6 @@
 pipeline {
-    agent {
-        docker {
-            image 'hashicorp/packer:latest'  // Or a specific version
-        }
-    }
+    agent any
+
     stages {
         stage('Checkout Code') {
             steps {
@@ -12,12 +9,22 @@ pipeline {
         }
         stage('Packer Init') {
             steps {
-                sh 'packer init aws-ami-v1.pkr.hcl'
+                sh '''
+                  docker run --rm \
+                    -v "${WORKSPACE}:${WORKSPACE}" \
+                    -w "${WORKSPACE}" \
+                    hashicorp/packer:latest init aws-ami-v1.pkr.hcl
+                '''
             }
         }
         stage('Packer Build') {
             steps {
-                sh 'packer build aws-ami-v1.pkr.hcl'
+                sh '''
+                  docker run --rm \
+                    -v "${WORKSPACE}:${WORKSPACE}" \
+                    -w "${WORKSPACE}" \
+                    hashicorp/packer:latest build aws-ami-v1.pkr.hcl
+                '''
             }
         }
     }
