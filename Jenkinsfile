@@ -1,18 +1,28 @@
-pipeline {
+// This pipeline automates the initialization and build process for Packer templates.
+    agent { label 'linux' }
     agent any
+    parameters {
+        string(name: 'REPO_URL', defaultValue: 'https://github.com/S-Sharma007/Packer_ultranav_work.git', description: 'Repository URL')
+    }
     stages {
-        stage('Install Packer') {
-            steps {
-                sh 'sudo apt-get update'
-                sh 'sudo apt-get install -y packer'
-            }
-        }
         stage('Checkout Code') {
             steps {
-                git 'https://github.com/S-Sharma007/Packer_ultranav_work.git'
+        stage('Packer Init') {
+            steps {
+                script {
+                    if (fileExists('aws-ami-v1.pkr.hcl')) {
+                        sh 'packer init aws-ami-v1.pkr.hcl'
+                    } else {
+                script {
+                    def initStatus = sh(script: 'packer init aws-ami-v1.pkr.hcl', returnStatus: true)
+                    if (initStatus != 0) {
+                        error('Packer init failed. Aborting pipeline.')
+                    }
+                }
+                    }
+                }
             }
         }
-        stage('Packer Init') {
             steps {
                 sh 'packer init aws-ami-v1.pkr.hcl'
             }
