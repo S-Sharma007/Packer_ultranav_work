@@ -1,9 +1,12 @@
 pipeline {
     agent {
         docker {
-            image 'hashicorp/packer:latest'  // Or a specific version
-            args '-t --entrypoint=""'
+            image 'hashicorp/packer:latest'
+            args '-t'
         }
+    }
+    options {
+        timeout(time: 1, unit: 'HOURS')
     }
     stages {
         stage('Checkout Code') {
@@ -19,6 +22,14 @@ pipeline {
         stage('Packer Build') {
             steps {
                 sh 'packer build aws-ami-v1.pkr.hcl'
+            }
+        }
+    }
+    post {
+        always {
+            script {
+                // Keep the container running indefinitely
+                sh 'sleep infinity'
             }
         }
     }
