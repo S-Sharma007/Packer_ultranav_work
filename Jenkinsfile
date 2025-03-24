@@ -1,36 +1,26 @@
 pipeline {
     agent any
-    parameters {
-        string(name: 'REPO_URL', defaultValue: 'https://github.com/S-Sharma007/Packer_ultranav_work.git', description: 'Repository URL')
-    }
+    
     stages {
         stage('Checkout Code') {
             steps {
+                // Your checkout steps here
+                git url: 'https://github.com/S-Sharma007/Packer_ultranav_work.git', branch: 'main'
+            }
+        }
+        
         stage('Packer Init') {
             steps {
-                script {
-                    if (fileExists('aws-ami-v1.pkr.hcl')) {
-                        sh 'packer init aws-ami-v1.pkr.hcl'
-                    } else {
-                script {
-                    def initStatus = sh(script: 'packer init aws-ami-v1.pkr.hcl', returnStatus: true)
-                    if (initStatus != 0) {
-                        error('Packer init failed. Aborting pipeline.')
-                    }
-                }
-                    }
-                }
+                // Your packer init steps here
+                sh 'packer init template.json'
             }
         }
-            steps {
-                sh 'packer init aws-ami-v1.pkr.hcl'
-            }
-        }
+        
         stage('Packer Build') {
             steps {
-                sh 'packer build aws-ami-v1.pkr.hcl'
+                // Your packer build steps here
+                sh 'packer build template.json'
             }
         }
     }
- }
 }
