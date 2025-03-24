@@ -1,5 +1,4 @@
-// This pipeline automates the initialization and build process for Packer templates.
-    agent { label 'linux' }
+pipeline {
     agent any
     parameters {
         string(name: 'REPO_URL', defaultValue: 'https://github.com/S-Sharma007/Packer_ultranav_work.git', description: 'Repository URL')
